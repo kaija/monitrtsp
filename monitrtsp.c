@@ -25,19 +25,15 @@ unsigned long fsize(char* file)
 void send_alert()
 {
     char buf[1024];
+    char buf2[1024];
     time_t rawtime;
     struct tm * timeinfo;
     time (&rawtime);
     timeinfo = localtime (&rawtime);
     sprintf (buf, "RTSP stream stop at %s", asctime(timeinfo));
-    FILE *f = fopen(MONITMAIL, "w");
-    if(f){
-        fputs(buf, f);
-        fclose(f);
-    }
-    sprintf(buf, "sendmail kaija.chang@gmail.com < %s", MONITMAIL);
-    printf("%s", buf);
-    system(buf);
+    sprintf(buf2, "sendemail -f kaija.chang.co@gmail.com -t kaija.chang@gmail.com -u RTSP_ALERT -m \"%s\"", buf);
+    //printf("%s", buf2);
+    system(buf2);
 }
 
 
