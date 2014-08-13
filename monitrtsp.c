@@ -16,7 +16,7 @@ unsigned long fsize(char* file)
     FILE * f = fopen(file, "r");
     if(f){
         fseek(f, 0, SEEK_END);
-        (unsigned long)ftell(f);
+        len = (unsigned long)ftell(f);
         fclose(f);
     }
     return len;
@@ -44,15 +44,15 @@ int main(int argc, char **argv)
     {
         remove(MONITFILE);
         printf("check RTSP server health\n");
-        sprintf(buf, "ffmpeg  -rtsp_transport tcp  -i rtsp://182.92.76.200:80/v1/live?device_id=600018001 -map 0:v -vcodec copy -an -t 10 -y %s", MONITFILE);
+        sprintf(buf, "ffmpeg  -rtsp_transport tcp  -i rtsp://182.92.76.200:80/v1/live?device_id=600018008 -map 0:v -vcodec copy -an -t 10 -y %s", MONITFILE);
         system(buf);
         unsigned long size = fsize(MONITFILE);
         printf("file size is %lu\n", size);
-        if(size < 100000){
+        if(size == 100000){
             printf("error stream stop\n");
             send_alert();
         }else{
-            printf("error stream is runing....\n");
+            printf("stream is runing....\n");
         }
         sleep(MONITPERIOD);
     }
